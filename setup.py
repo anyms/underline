@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="underline",
-    version="1.0.2",
+    version="1.0.3",
     description="A human friendly web crawling library",
     py_module=["underline"],
     license="MIT",
@@ -37,4 +37,4 @@ setup(
 
 # pip install -e .
 # python setup.py sdist
-# twine.exe upload --repository-url=https://upload.pypi.org/legacy/ d ist/*
+# twine.exe upload --repository-url=https://upload.pypi.org/legacy/ dist/*

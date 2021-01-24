@@ -13,7 +13,7 @@ class Selector(list):
         self.extend(elements)
 
         self.size    = lambda: len(self)
-        self.val     = lambda: self[0]["value"]
+        self.val     = lambda: self[0].get("value")
         self.parent  = lambda: self.new(self[0].parent)
         self.last    = lambda: self.new(self[-1])
         self.first   = lambda: self.new(self[0])
@@ -21,7 +21,8 @@ class Selector(list):
         self.new     = lambda els: Selector(self.document, els, self.url)
         self.audios  = lambda: self._find_src_attrs("audio")
         self.videos  = lambda: self._find_src_attrs("video")
-        self.images  = lambda: self._find_src_attrs("images")
+        self.images  = lambda: self._find_src_attrs("img")
+        self.to_set  = lambda: self.new(list(set(self)))
 
 
     def __repr__(self):
@@ -64,10 +65,11 @@ class Selector(list):
     def also(self, expr):
         els = []
         for el in self:
-            if expr(self.new(el)):
+            if type(el) is not Selector:
+                el = self.new(el)
+            if expr(el):
                 els.append(self.new(el))
         return self.new(els)
-        
 
     def css(self, selector):
         out = []

@@ -5,13 +5,14 @@ from .core.selector import Selector
 
 
 class Underline(Selector):
-    def __init__(self, html=None, url=None):
+    def __init__(self, html=None, url=None, method="get", **kwargs):
+        self.session = requests.Session()
         if html is None:
-            resp = requests.get(url)
+            resp = self.session.request(url=url, method=method, **kwargs)
             self.content = resp.text
             self.url = resp.url
             self.document = BeautifulSoup(resp.content, "html.parser")
-            Selector.__init__(self, document=self.document, elements=[], url=html)
+            Selector.__init__(self, document=self.document, elements=[], url=url)
         else:
             self.document = BeautifulSoup(html, "html.parser")
             self.content = html
@@ -27,34 +28,9 @@ class Underline(Selector):
     def title(self):
         return self.document.title.text
 
+    def follow(self, url, method="get", **kwargs):
+        resp = self.session.request(url=url, method=method, **kwargs)
+        self.url = resp.url
+        self.content = resp.text
+        self.document = BeautifulSoup(resp.content, "html.parser")
 
-# s = """
-# <div>
-#     <button>Click me! <span>test</span> </button>
-#     <div class="red green">I am Red</div>
-#     <ul>
-#         <li>Item 1</li>
-#         <li>Item 2</li>
-#         <li>Item 3</li>
-#         <li>Item 4</li>
-#         hi
-#         <br/>
-#         hello
-#     </ul>
-#     <audio src="/play.mp3"/>
-#     <img src="/hello.jpg"/>
-#     <img src="./hello2.jpg"/>
-#     <a href="#">Link</a>
-
-#     <form method="post" action="/process.php">
-#         <input type="text" name="username"/>
-#         <input type="password" name="password"/>
-#         <input type="submit" name="submit" value="Login"/>
-#     </form>
-# </div>
-# """
-
-
-# _ = Underline(url="https://github.com/lineofapi/lineofjs-dom")
-# output = _.css("ul li a").also(lambda el: el.href().startswith("#")).map(lambda el: el.href())
-# print(output)

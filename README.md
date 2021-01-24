@@ -48,6 +48,7 @@ page = {
 - **.videos()** - get video element sources from selected elements
 - **.images()** - get image element sources from selected elements
 - **.title()** - get website title
+- **.clean()** - remove duplicates
 
 
 ### Example 1: Extracting Links
